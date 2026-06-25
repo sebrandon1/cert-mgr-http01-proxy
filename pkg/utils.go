@@ -234,13 +234,13 @@ func SupportedOCPVersion(runningVersion string) error {
 	}
 	major, _ := strconv.Atoi(version[0])
 	minor, _ := strconv.Atoi(version[1])
-	if major != 4 {
-		return errors.New("Invalid OCP version " + runningVersion + " (unknown major version)")
+	if major < 4 {
+		return errors.New("Unsupported OCP version " + runningVersion + " (minimum supported is 4.17+)")
 	}
-	if major == 4 && minor > 16 {
-		return nil
+	if major == 4 && minor < 17 {
+		return errors.New("Unsupported OCP version " + runningVersion + " (minimum supported is 4.17+)")
 	}
-	return errors.New("Unsupported OCP version " + runningVersion + " (minimum supported is 4.17+)")
+	return nil
 }
 
 func resolveDNSRecord(hostname string) (ips []net.IP, err error) {
